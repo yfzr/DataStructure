@@ -9,11 +9,11 @@ public class CircleArrayQueue {
         Character key;
         boolean loop = true;
         while (loop) {
-            System.out.println("s(show):ÏÔÊ¾¶ÓÁĞ");
-            System.out.println("e(exit):ÍË³ö³ÌĞò");
-            System.out.println("a(add):Ìí¼ÓÊı¾İ");
-            System.out.println("g(get):È¡³öÊı¾İ");
-            System.out.println("h(head):ÏÔÊ¾¶ÓÁĞÍ·");
+            System.out.println("s(show):æ˜¾ç¤ºé˜Ÿåˆ—");
+            System.out.println("e(exit):é€€å‡ºç¨‹åº");
+            System.out.println("a(add):æ·»åŠ æ•°æ®");
+            System.out.println("g(get):å–å‡ºæ•°æ®");
+            System.out.println("h(head):æ˜¾ç¤ºé˜Ÿåˆ—å¤´");
 
             key = scanner.next().charAt(0);
             switch (key) {
@@ -24,14 +24,14 @@ public class CircleArrayQueue {
                     loop = false;
                     break;
                 case 'a':
-                    System.out.println("ÇëÊäÈëÌí¼ÓµÄÊı×Ö£º");
+                    System.out.println("è¯·è¾“å…¥æ·»åŠ çš„æ•°å­—ï¼š");
                     int value = scanner.nextInt();
                     queue.addQueue(value);
                     break;
                 case 'g':
                     try {
                         int data = queue.getQueue();
-                        System.out.printf("È¡³öµÄÊı¾İÊÇ£º%d\n", data);
+                        System.out.printf("å–å‡ºçš„æ•°æ®æ˜¯ï¼š%d\n", data);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -39,7 +39,7 @@ public class CircleArrayQueue {
                 case 'h':
                     try {
                         int head = queue.headQueue();
-                        System.out.printf("Í·²¿µÄÊı¾İÊÇ£º%d\n", head);
+                        System.out.printf("å¤´éƒ¨çš„æ•°æ®æ˜¯ï¼š%d\n", head);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -48,74 +48,74 @@ public class CircleArrayQueue {
                     break;
             }
         }
-        System.out.println("ÒÑÍË³ö³ÌĞò");
+        System.out.println("å·²é€€å‡ºç¨‹åº");
     }
 }
 
 /**
- * Ê¹ÓÃ»·ĞÎÊı×éÄ£ÄâÒ»¸ö¶ÓÁĞ
+ * ä½¿ç”¨ç¯å½¢æ•°ç»„æ¨¡æ‹Ÿä¸€ä¸ªé˜Ÿåˆ—
  */
 class CircleArray {
     private int maxSize;
-    private int front;    //¶ÓÁĞÍ·£¬Ä¬ÈÏÎª0
-    private int rear;    //¶ÓÁĞÎ²£¬Ä¬ÈÏÎª0
+    private int front;    //é˜Ÿåˆ—å¤´ï¼Œé»˜è®¤ä¸º0
+    private int rear;    //é˜Ÿåˆ—å°¾ï¼Œé»˜è®¤ä¸º0
     private int[] arr;
 
-    //´´½¨¶ÓÁĞ¹¹ÔìÆ÷
+    //åˆ›å»ºé˜Ÿåˆ—æ„é€ å™¨
     public CircleArray(int arrMaxSize) {
         maxSize = arrMaxSize;
         arr = new int[maxSize];
     }
 
-    //ÅĞ¶Ï¶ÓÁĞÊÇ·ñÂú
+    //åˆ¤æ–­é˜Ÿåˆ—æ˜¯å¦æ»¡
     public boolean isFull() {
         return (rear + 1) % maxSize == front;
     }
 
-    //ÅĞ¶Ï¶ÓÁĞÊÇ·ñ¿Õ
+    //åˆ¤æ–­é˜Ÿåˆ—æ˜¯å¦ç©º
     public boolean isEmpity() {
         return rear == front;
     }
 
-    //Ìí¼ÓÊı¾İµ½¶ÓÁĞ
+    //æ·»åŠ æ•°æ®åˆ°é˜Ÿåˆ—
     public void addQueue(int n) {
         if (isFull()) {
-            System.out.println("¶ÓÁĞÒÑÂú£¬ÎŞ·¨Ìí¼ÓÊı¾İ");
+            System.out.println("é˜Ÿåˆ—å·²æ»¡ï¼Œæ— æ³•æ·»åŠ æ•°æ®");
             return;
         }
         arr[rear] = n;
         rear = (rear + 1) % maxSize;
     }
 
-    //»ñÈ¡¶ÓÁĞÊı¾İ
+    //è·å–é˜Ÿåˆ—æ•°æ®
     public int getQueue() {
         if (isEmpity()) {
-            throw new RuntimeException("¿Õ¶ÓÁĞ£¬ÎŞ·¨È¡³öÊı¾İ");
+            throw new RuntimeException("ç©ºé˜Ÿåˆ—ï¼Œæ— æ³•å–å‡ºæ•°æ®");
         }
         int value = arr[front];
         front = (front + 1) % maxSize;
         return value;
     }
 
-    //ÏÔÊ¾¶ÓÁĞËùÓĞÊı¾İ
+    //æ˜¾ç¤ºé˜Ÿåˆ—æ‰€æœ‰æ•°æ®
     public void showQueue() {
         if (isEmpity()) {
-            System.out.println("¿Õ¶ÓÁĞ£¬ÎŞÊı¾İ");
+            System.out.println("ç©ºé˜Ÿåˆ—ï¼Œæ— æ•°æ®");
             return;
         }
         for (int i = front; i < front + size(); i++) {
             System.out.printf("arr[%d]=%d\n", i%maxSize, arr[i%maxSize]);
         }
     }
-    //Çó³öµ±Ç°¶ÓÁĞÓĞĞ§Êı¾İ¸öÊı
+    //æ±‚å‡ºå½“å‰é˜Ÿåˆ—æœ‰æ•ˆæ•°æ®ä¸ªæ•°
     public int size() {
         return (rear + maxSize - front) % maxSize;
     }
 
-    //ÏÔÊ¾¶ÓÁĞµÄÍ·Êı¾İ
+    //æ˜¾ç¤ºé˜Ÿåˆ—çš„å¤´æ•°æ®
     public int headQueue() {
         if (isEmpity()) {
-            throw new RuntimeException("¿Õ¶ÓÁĞ£¬ÎŞÊı¾İ");
+            throw new RuntimeException("ç©ºé˜Ÿåˆ—ï¼Œæ— æ•°æ®");
         }
         return arr[front];
     }
