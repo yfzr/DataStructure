@@ -20,8 +20,8 @@ public class SingleLinkedList {
         //测试添加方法2
         slld.addByOrder(hero1);
         slld.addByOrder(hero4);
-        slld.addByOrder(hero3);
         slld.addByOrder(hero2);
+        slld.addByOrder(hero3);
         slld.addByOrder(hero2);
 
         slld.list();
@@ -31,12 +31,22 @@ public class SingleLinkedList {
 
         slld.delete(5);
         slld.list();
+
+        System.out.printf("单链表中的有%d个有效节点\n", slld.getLength(slld.getHead()));
+
+        System.out.printf("单链表中倒数第%d个节点为：" + slld.findLastIndexNode(slld.getHead(), 2) + "\n", 2);
+
     }
 }
 
 class SingleLinkedListDemo{
     //初始化一个头节点，头节点不动，且不存放具体数据
     private HeroNode head = new HeroNode(0, "", "");
+
+    public HeroNode getHead(){
+        return head;
+    }
+
     /**
      * 添加节点到单向链表
      * 当不考虑编号顺序时，思路：
@@ -153,6 +163,36 @@ class SingleLinkedListDemo{
             System.out.println(temp);
             temp = temp.next;
         }
+    }
+
+    //获取单链表的节点个数
+    public int getLength(HeroNode head){
+        if (head.next == null){
+            return  0;
+        }
+        HeroNode current = head.next;
+        int len = 0;
+        while (current != null){
+            len++;
+            current = current.next;
+        }
+        return len;
+    }
+
+    //查找单链表中单数第K个节点
+    public HeroNode findLastIndexNode(HeroNode head, int index){
+        if (head.next == null){
+            return null;
+        }
+        int size = getLength(head);
+        if (index <= 0 || index > size){
+            return null;
+        }
+        HeroNode current = head.next;
+        for (int i = 0; i < size-index; i++){
+            current = current.next;
+        }
+        return current;
     }
 }
 
