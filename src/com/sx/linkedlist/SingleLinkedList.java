@@ -36,6 +36,9 @@ public class SingleLinkedList {
 
         System.out.printf("单链表中倒数第%d个节点为：" + slld.findLastIndexNode(slld.getHead(), 2) + "\n", 2);
 
+        slld.reverseList(slld.getHead());
+        System.out.println("反转后的单链表如下");
+        slld.list();
     }
 }
 
@@ -179,7 +182,7 @@ class SingleLinkedListDemo{
         return len;
     }
 
-    //查找单链表中单数第K个节点
+    //查找单链表中倒数第K个节点
     public HeroNode findLastIndexNode(HeroNode head, int index){
         if (head.next == null){
             return null;
@@ -193,6 +196,24 @@ class SingleLinkedListDemo{
             current = current.next;
         }
         return current;
+    }
+
+    //单链表反转
+    public void reverseList(HeroNode head){
+        if (head.next == null || head.next.next == null){
+            return;
+        }
+        HeroNode cur = head.next;
+        HeroNode next = null;
+        HeroNode reverseHead = new HeroNode(0, "", "");
+        while (cur != null){
+            next = cur.next;
+            cur.next = reverseHead.next;
+            //System.out.println(next == cur.next); //结果为false
+            reverseHead.next = cur; //反向链表与当前节点连接
+            cur = next;
+        }
+        head.next = reverseHead.next;
     }
 }
 
