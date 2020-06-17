@@ -1,5 +1,7 @@
 package com.sx.linkedlist;
 
+import java.util.Stack;
+
 public class SingleLinkedList {
 
     public static void main(String[] args){
@@ -39,6 +41,9 @@ public class SingleLinkedList {
         slld.reverseList(slld.getHead());
         System.out.println("反转后的单链表如下");
         slld.list();
+
+        System.out.println("逆序打印单链表如下");
+        slld.reversePrint(slld.getHead());
     }
 }
 
@@ -46,6 +51,7 @@ class SingleLinkedListDemo{
     //初始化一个头节点，头节点不动，且不存放具体数据
     private HeroNode head = new HeroNode(0, "", "");
 
+    //获取头节点
     public HeroNode getHead(){
         return head;
     }
@@ -214,6 +220,27 @@ class SingleLinkedListDemo{
             cur = next;
         }
         head.next = reverseHead.next;
+    }
+
+    //逆序打印单链表，如果先反转后打印，则会破坏链表结构，不可取，因此采用栈结构
+    public void reversePrint(HeroNode head){
+        if (head.next == null){
+            return;
+        }
+        Stack<HeroNode> stack = new Stack<>();
+        HeroNode cur = head.next;
+        while (cur != null){
+            stack.push(cur);    //入栈
+            cur = cur.next;
+        }
+        while (stack.size() != 0){
+            System.out.println(stack.pop());    //出栈
+        }
+    }
+
+    //合并两个单链表，合并后的链表依然有序
+    public void combine(HeroNode head1, HeroNode head2){
+        //todo
     }
 }
 
