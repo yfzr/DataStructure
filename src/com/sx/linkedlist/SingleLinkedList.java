@@ -25,12 +25,11 @@ public class SingleLinkedList {
         slld.addByOrder(hero2);
         slld.addByOrder(hero3);
         slld.addByOrder(hero2);
-
+        //测试更新节点
         slld.list();
         slld.update(hero41);
-
         slld.list();
-
+        //测试删除节点
         slld.delete(5);
         slld.list();
 
@@ -44,6 +43,9 @@ public class SingleLinkedList {
 
         System.out.println("逆序打印单链表如下");
         slld.reversePrint(slld.getHead());
+        //slld.list();
+
+
     }
 }
 
@@ -239,8 +241,10 @@ class SingleLinkedListDemo{
     }
 
     //合并两个单链表，合并后的链表依然有序
-    public void combine(HeroNode head1, HeroNode head2){
-        //todo
+    public HeroNode combine(HeroNode head1, HeroNode head2){
+        HeroNode newHead = new HeroNode(0, "", "");
+
+        return newHead;
     }
 }
 
