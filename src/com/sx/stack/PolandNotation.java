@@ -17,12 +17,14 @@ public class PolandNotation {
 //        int res = calculate(list);
 //        System.out.println("计算结果是：" + res);
 
-        String expression = "1+((2+3)*4)-5";
+        String expression = "10+((2+3)*4)-5";
         List<String> list1 = infixToList(expression);
-        System.out.println(list1);
+        System.out.println("中缀表达式：" + list1);
 
         List<String> list2 = parseSuffixList(list1);
         System.out.println("中缀转后缀：" + list2);
+
+        System.out.println(calculate(list2));
     }
 
     //将中缀表达式存放在List中
