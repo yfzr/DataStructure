@@ -7,6 +7,7 @@ import java.util.Arrays;
 /**
  * 冒泡排序
  * 时间复杂度O(n^2)
+ * 测试大批量（80000）的排序时间约为12s
  */
 public class BubbleSort {
     public static void main(String[] args) {
