@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * 快速排序
  * 时间复杂度O(nlog(n))
- * 测试大批量（80000）的排序时间约为20~30 ms
+ * 测试大批量（800000）的排序时间约为190 ms
  */
 public class QuickSort {
     public static void main(String[] args) {
@@ -15,7 +15,7 @@ public class QuickSort {
         //System.out.println("快速排序的结果：" + Arrays.toString(arr));
 
         //大批量插入排序测试
-        int[] arr = new int[80000];
+        int[] arr = new int[800000];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (int) (Math.random()*8000000);
         }

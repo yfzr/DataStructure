@@ -11,7 +11,7 @@ import java.util.Arrays;
  * 时间复杂度O(nlog(n))
  * 测试大批量（80000）的排序时间
  *      交换式：约为14s
- *      移位式：20-35 ms
+ *      移位式（800000）：100 ms
  */
 public class ShellSort {
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class ShellSort {
         //shellSort(arr);
 
         //大批量插入排序测试
-        int[] arr = new int[80000];
+        int[] arr = new int[800000];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = (int) (Math.random()*8000000);
         }
