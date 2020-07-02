@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 /**
  * 基数排序
- * 时间复杂度O(nlog(n))
+ * 时间复杂度O(n*k) k-桶的个数
  * 测试大批量（800000）的排序时间约为90 ms
  */
 public class RadixSort {
