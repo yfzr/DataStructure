@@ -31,12 +31,16 @@ public class SelectSort {
         System.out.println(dtf.format(localDateTime2));
     }
 
+    /**
+     * 选择排序：从待排序序列中选择最左（右）的值作为初始最小（大）值，与其余数据进行比较，如果逆序，则交换位置，继续比较
+     * @param arr 待排序序列
+     */
     public static void selectSort(int[] arr) {
         int minIndex, min;
         for (int i = 0; i < arr.length - 1; i++) {
             minIndex = i;
             min = arr[i];
-            for (int j = i + 1; j < arr.length - 1; j++) {
+            for (int j = i + 1; j < arr.length; j++) {
                 if (min > arr[j]) {
                     min = arr[j];
                     minIndex = j;

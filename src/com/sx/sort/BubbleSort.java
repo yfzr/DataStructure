@@ -27,6 +27,10 @@ public class BubbleSort {
         System.out.println(localDateTime2.toString());
     }
 
+    /**
+     * 冒泡排序：依次比较待排序序列的相邻两个数，如果逆序，则交换位置，继续向后比较，最终把最大（小）的数据放在序列尾部
+     * @param arr 待排序序列
+     */
     public static void bubbleSort(int[] arr){
         int temp = 0;
         boolean flag = false;

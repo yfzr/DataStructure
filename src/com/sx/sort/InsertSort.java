@@ -34,7 +34,7 @@ public class InsertSort {
     /**
      * 插入排序
      * 将第一个数默认为有序表，后面第（n-1）个数看成无序表。每次将无序表的第一个数与有序表最后一个数进行比较插入（排序为从小到大）。
-     * @param arr
+     * @param arr 待排序序列
      */
     public static void insertSort(int[] arr) {
         //待插入的位置
