@@ -22,6 +22,18 @@ public class BinaryTreeDemo {
 
         System.out.println("后序遍历");
         binaryTree.postOrder();
+
+//        System.out.println("前序查找-----");
+//        HeroNode resNode = binaryTree.preOrderSearch(5);
+//        System.out.printf("id=%d  name=%s", resNode.getId(), resNode.getName());
+
+//        System.out.println("中序查找-----");
+//        HeroNode resNode = binaryTree.infixOrderSearch(5);
+//        System.out.printf("id=%d  name=%s", resNode.getId(), resNode.getName());
+
+        System.out.println("后序查找-----");
+        HeroNode resNode = binaryTree.postOrderSearch(15);
+        System.out.printf("id=%d  name=%s", resNode.getId(), resNode.getName());
     }
 }
 
@@ -115,6 +127,79 @@ class HeroNode{
         //3.最后输出当前节点
         System.out.println(this);
     }
+    //前序查找
+    public HeroNode preOrderSearch(int id){
+        HeroNode resNode = null;
+        System.out.println("正在进行前序查找...");
+        //1.先比较当前节点的id，如果相同，则直接返回
+        if (this.id == id){
+            return this;
+        }
+        //2.如果不同且左节点非空，则先继续向左前序查找
+        if (this.left != null){
+            resNode = this.left.preOrderSearch(id);
+        }
+        //3.如果向左前序查找已找到，则返回
+        if (resNode != null){
+            return resNode;
+        }
+        //4.如果不同且右节点非空，则向右前序查找
+        if (this.right != null){
+            resNode = this.right.preOrderSearch(id);
+        }
+        //System.out.printf("找不到id=%d的节点信息\n", id);
+        return resNode;
+    }
+    //中序查找
+    public HeroNode infixOrderSearch(int id){
+        HeroNode resNode = null;
+        //1.如果左节点非空，则先继续向左中序查找
+        if (this.left != null){
+            resNode = this.left.infixOrderSearch(id);
+        }
+        //2.如果向左中序查找已找到，则返回
+        if (resNode != null){
+            return resNode;
+        }
+        System.out.println("正在进行中序查找...");
+        //3.比较当前节点的id，如果相同，则直接返回
+        if (this.id == id){
+            return this;
+        }
+        //4.如果不同且右节点非空，则向右中序查找
+        if (this.right != null){
+            resNode = this.right.infixOrderSearch(id);
+        }
+        //System.out.printf("找不到id=%d的节点信息\n", id);
+        return resNode;
+    }
+    //后序查找
+    public HeroNode postOrderSearch(int id){
+        HeroNode resNode = null;
+        //1.如果左节点非空，则先继续向左后序查找
+        if (this.left != null){
+            resNode = this.left.postOrderSearch(id);
+        }
+        //2.如果向左后序查找已找到，则返回
+        if (resNode != null){
+            return resNode;
+        }
+        //3.如果不同且右节点非空，则向右后序查找
+        if (this.right != null){
+            resNode = this.right.postOrderSearch(id);
+        }
+        //4.如果向右后序查找已找到，则返回
+        if (resNode != null){
+            return resNode;
+        }
+        System.out.println("正在进行后序查找...");
+        //5.最后比较当前节点的id，如果相同，则直接返回
+        if (this.id == id){
+            return this;
+        }
+        //System.out.printf("找不到id=%d的节点信息\n", id);
+        return resNode;
+    }
 }
 
 //二叉树
@@ -145,6 +230,33 @@ class BinaryTree{
             this.root.postOrder();
         }else {
             System.out.println("二叉树为空，无法遍历");
+        }
+    }
+    //前序查找
+    public HeroNode preOrderSearch(int id){
+        if (this.root != null){
+            return this.root.preOrderSearch(id);
+        }else {
+            System.out.println("二叉树为空");
+            return null;
+        }
+    }
+    //中序查找
+    public HeroNode infixOrderSearch(int id){
+        if (this.root != null){
+            return this.root.infixOrderSearch(id);
+        }else {
+            System.out.println("二叉树为空");
+            return null;
+        }
+    }
+    //后序查找
+    public HeroNode postOrderSearch(int id){
+        if (this.root != null){
+            return this.root.postOrderSearch(id);
+        }else {
+            System.out.println("二叉树为空");
+            return null;
         }
     }
 }
