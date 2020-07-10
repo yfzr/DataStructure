@@ -33,7 +33,15 @@ public class BinaryTreeDemo {
 
         System.out.println("后序查找-----");
         HeroNode resNode = binaryTree.postOrderSearch(15);
-        System.out.printf("id=%d  name=%s", resNode.getId(), resNode.getName());
+        if (resNode != null){
+            System.out.printf("id=%d  name=%s\n", resNode.getId(), resNode.getName());
+        }else {
+            System.out.println("没有找到要删除的节点");
+        }
+
+        binaryTree.delNode(5);
+        System.out.println("删除后前序遍历：");
+        binaryTree.preOrder();
     }
 }
 
@@ -200,6 +208,27 @@ class HeroNode{
         //System.out.printf("找不到id=%d的节点信息\n", id);
         return resNode;
     }
+    //删除节点
+    public void delNode(int id){
+        //如果当前节点的左节点非空，且刚好是要删除的节点，则删除返回
+        if (this.left != null && this.left.id == id){
+            this.left = null;
+            return;
+        }
+        //如果当前节点的右节点非空，且刚好是要删除的节点，则删除返回
+        if (this.right != null && this.right.id == id){
+            this.right =null;
+            return;
+        }
+        //如果没找到节点，则继续向左递归删除
+        if (this.left != null){
+            this.left.delNode(id);
+        }
+        //如果没找到节点，则继续向右递归删除
+        if (this.right != null){
+            this.right.delNode(id);
+        }
+    }
 }
 
 //二叉树
@@ -257,6 +286,19 @@ class BinaryTree{
         }else {
             System.out.println("二叉树为空");
             return null;
+        }
+    }
+    //节点删除
+    public void delNode(int id){
+        if (this.root != null){
+            if (this.root.getId() == id){
+                this.root =null;
+                return;
+            }else {
+                this.root.delNode(id);
+            }
+        }else {
+            System.out.println("二叉树为空，无法删除节点");
         }
     }
 }
