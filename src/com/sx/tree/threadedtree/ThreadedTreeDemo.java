@@ -24,6 +24,11 @@ public class ThreadedTreeDemo {
         HeroNode rightNode = heroNode5.getRight();
         System.out.println("10号节点的前驱节点是：" + leftNode);
         System.out.println("10号节点的后置节点是：" + rightNode);
+
+        //遍历测试
+        //tbt.infixList();
+        //tbt.preList();
+        tbt.postList();
     }
 }
 
@@ -251,7 +256,9 @@ class ThreadedBinaryTree{
             return;
         }
         //先向左线索化
-        threadedNode(node.getLeft());
+        if (node.getLeft() != null){
+            threadedNode(node.getLeft());
+        }
 
         //当前节点的线索化
         if (node.getLeft() == null){
@@ -269,7 +276,63 @@ class ThreadedBinaryTree{
         //将当前节点设置为下一节点的前置节点
         pre = node;
         //向右线索化
-        threadedNode(node.getRight());
+        if (node.getRight() != null){
+            threadedNode(node.getRight());
+        }
+    }
+    //中序遍历线索化二叉树
+    public void infixList(){
+        HeroNode node = root;
+        while (node != null){
+            //找到第一个线索化的节点
+            while (node.getLeftType() == 0){
+                node = node.getLeft();
+            }
+            System.out.println(node);
+            //输出后继节点
+            while (node.getRightType() == 1){
+                node = node.getRight();
+                System.out.println(node);
+            }
+            //回到父节点后需要向右移动节点，否则会死循环
+            node = node.getRight();
+        }
+    }
+    //前序遍历线索化二叉树
+    public void preList(){
+        HeroNode node = root;
+        while (node != null){
+            System.out.println(node);
+            //找到第一个线索化的节点
+            while (node.getLeftType() == 0){
+                node = node.getLeft();
+                System.out.println(node);
+            }
+            //输出后继节点
+            while (node.getRightType() == 1){
+                node = node.getRight();
+            }
+            //回到父节点后需要向右移动节点，否则会死循环
+            node = node.getRight();
+        }
+    }
+    //后序遍历线索化二叉树
+    public void postList(){
+        HeroNode node = root;
+        while (node != null){
+            //找到第一个线索化的节点
+            while (node.getLeftType() == 0){
+                node = node.getLeft();
+            }
+            //输出后继节点
+            while (node.getRightType() == 1){
+                System.out.println(node);
+                node = node.getRight();
+            }
+            System.out.println(node);
+            //回到父节点后需要向右移动节点，否则会死循环
+            node = node.getRight();
+        }
     }
     //前序遍历
     public void preOrder(){
