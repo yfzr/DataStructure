@@ -19,7 +19,7 @@ public class ThreadedTreeDemo {
         heroNode3.setLeft(heroNode6);
 
         //测试中序线索化
-        tbt.threadedNode();
+        tbt.infixThreadedNode();
         HeroNode leftNode = heroNode5.getLeft();
         HeroNode rightNode = heroNode5.getRight();
         System.out.println("10号节点的前驱节点是：" + leftNode);
@@ -247,17 +247,17 @@ class ThreadedBinaryTree{
     //
     private HeroNode pre = null;
     //中序遍历方式实现二叉树节点的线索化
-    public void threadedNode(){
-        threadedNode(root);
+    public void infixThreadedNode(){
+        infixThreadedNode(root);
     }
-    public void threadedNode(HeroNode node){
+    public void infixThreadedNode(HeroNode node){
         if (node == null){
             //System.out.println("二叉树为空，无法线索化");
             return;
         }
         //先向左线索化
         if (node.getLeft() != null){
-            threadedNode(node.getLeft());
+            infixThreadedNode(node.getLeft());
         }
 
         //当前节点的线索化
@@ -277,7 +277,74 @@ class ThreadedBinaryTree{
         pre = node;
         //向右线索化
         if (node.getRight() != null){
-            threadedNode(node.getRight());
+            infixThreadedNode(node.getRight());
+        }
+    }
+    //前序遍历方式实现二叉树节点的线索化
+    public void preThreadedNode(){
+        preThreadedNode(root);
+    }
+    public void preThreadedNode(HeroNode node){
+        if (node == null){
+            //System.out.println("二叉树为空，无法线索化");
+            return;
+        }
+        //当前节点的线索化
+        if (node.getLeft() == null){
+            //设置当前节点的前置节点
+            node.setLeft(pre);
+            //设置当前节点的左节点类型
+            node.setLeftType(1);
+        }
+        if (pre != null && pre.getRight() == null){
+            //设置当前节点的后继节点
+            pre.setRight(node);
+            //设置当前节点的右节点类型
+            pre.setRightType(1);
+        }
+        //向左线索化
+        if (node.getLeft() != null){
+            preThreadedNode(node.getLeft());
+        }
+
+        //将当前节点设置为下一节点的前置节点
+        pre = node;
+        //向右线索化
+        if (node.getRight() != null){
+            preThreadedNode(node.getRight());
+        }
+    }
+    //后序遍历方式实现二叉树节点的线索化
+    public void postThreadedNode(){
+        postThreadedNode(root);
+    }
+    public void postThreadedNode(HeroNode node){
+        if (node == null){
+            //System.out.println("二叉树为空，无法线索化");
+            return;
+        }
+        //先向左线索化
+        if (node.getLeft() != null){
+            postThreadedNode(node.getLeft());
+        }
+        //将当前节点设置为下一节点的前置节点
+        pre = node;
+        //向右线索化
+        if (node.getRight() != null){
+            postThreadedNode(node.getRight());
+        }
+        //当前节点的线索化
+        if (node.getLeft() == null){
+            //设置当前节点的前置节点
+            node.setLeft(pre);
+            //设置当前节点的左节点类型
+            node.setLeftType(1);
+        }
+        if (pre != null && pre.getRight() == null){
+            //设置当前节点的后继节点
+            pre.setRight(node);
+            //设置当前节点的右节点类型
+            pre.setRightType(1);
         }
     }
     //中序遍历线索化二叉树
