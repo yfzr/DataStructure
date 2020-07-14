@@ -21,9 +21,9 @@ public class ThreadedTreeDemo {
         //中序线索化
         //tbt.infixThreadedNode();
         //前序线索化
-        tbt.preThreadedNode();
+        //tbt.preThreadedNode();
         //后序线索化
-        //tbt.postThreadedNode();
+        tbt.postThreadedNode();
         HeroNode leftNode = heroNode5.getLeft();
         HeroNode rightNode = heroNode5.getRight();
         System.out.println("10号节点的前驱节点是：" + leftNode);
@@ -31,8 +31,8 @@ public class ThreadedTreeDemo {
 
         //遍历测试
         //tbt.infixList();  //8,3,10,1,14,6
-        tbt.preList();      //1,3,8,10,6,14
-        //tbt.postList();   //8,10,3,14,6,1
+        //tbt.preList();      //1,3,8,10,6,14
+        tbt.postList();   //8,10,3,14,6,1
     }
 }
 
@@ -334,8 +334,6 @@ class ThreadedBinaryTree{
         if (node.getRight() != null){
             postThreadedNode(node.getRight());
         }
-        //将当前节点设置为下一节点的前置节点
-        pre = node;
         //当前节点的线索化
         if (node.getLeft() == null){
             //设置当前节点的前置节点
@@ -349,6 +347,8 @@ class ThreadedBinaryTree{
             //设置当前节点的右节点类型
             pre.setRightType(1);
         }
+        //将当前节点设置为下一节点的前置节点
+        pre = node;
     }
     //中序遍历线索化二叉树
     public void infixList(){
@@ -385,17 +385,31 @@ class ThreadedBinaryTree{
     //后序遍历线索化二叉树
     public void postList(){
         HeroNode node = root;
+        //找到第一个线索化的节点
+        while (node.getLeftType() == 0){
+            node = node.getLeft();
+        }
         while (node != null){
-            //找到第一个线索化的节点
-            while (node.getLeftType() == 0){
-                node = node.getLeft();
-            }
             //输出后继节点
-            while (node.getRightType() == 1){
+            if (node.getRightType() == 1){
                 System.out.println(node);
+                pre = node;
                 node = node.getRight();
+            }else {
+                if (node.getRight() == pre){
+                    System.out.println(node);
+                    if (node == root){
+                        return;
+                    }
+                    pre = node;
+                    node = node.getRight();
+                }else {
+                    node = node.getRight();
+                    while (node != null && node.getLeftType() == 0){
+                        node = node.getLeft();
+                    }
+                }
             }
-            System.out.println(node);
             //回到父节点后需要向右移动节点，否则会死循环
             node = node.getRight();
         }
