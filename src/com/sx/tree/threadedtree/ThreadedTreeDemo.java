@@ -18,17 +18,21 @@ public class ThreadedTreeDemo {
         heroNode2.setRight(heroNode5);
         heroNode3.setLeft(heroNode6);
 
-        //测试中序线索化
-        tbt.infixThreadedNode();
+        //中序线索化
+        //tbt.infixThreadedNode();
+        //前序线索化
+        tbt.preThreadedNode();
+        //后序线索化
+        //tbt.postThreadedNode();
         HeroNode leftNode = heroNode5.getLeft();
         HeroNode rightNode = heroNode5.getRight();
         System.out.println("10号节点的前驱节点是：" + leftNode);
         System.out.println("10号节点的后置节点是：" + rightNode);
 
         //遍历测试
-        //tbt.infixList();
-        //tbt.preList();
-        tbt.postList();
+        //tbt.infixList();  //8,3,10,1,14,6
+        tbt.preList();      //1,3,8,10,6,14
+        //tbt.postList();   //8,10,3,14,6,1
     }
 }
 
@@ -246,7 +250,7 @@ class ThreadedBinaryTree{
     }
     //
     private HeroNode pre = null;
-    //中序遍历方式实现二叉树节点的线索化
+    //中序线索化二叉树
     public void infixThreadedNode(){
         infixThreadedNode(root);
     }
@@ -280,7 +284,7 @@ class ThreadedBinaryTree{
             infixThreadedNode(node.getRight());
         }
     }
-    //前序遍历方式实现二叉树节点的线索化
+    //前序线索化二叉树
     public void preThreadedNode(){
         preThreadedNode(root);
     }
@@ -302,19 +306,18 @@ class ThreadedBinaryTree{
             //设置当前节点的右节点类型
             pre.setRightType(1);
         }
-        //向左线索化
-        if (node.getLeft() != null){
-            preThreadedNode(node.getLeft());
-        }
-
         //将当前节点设置为下一节点的前置节点
         pre = node;
+        //向左线索化
+        if (node.getLeft() != null && node.getLeftType() == 0){
+            preThreadedNode(node.getLeft());
+        }
         //向右线索化
-        if (node.getRight() != null){
+        if (node.getRight() != null && node.getRightType() == 0){
             preThreadedNode(node.getRight());
         }
     }
-    //后序遍历方式实现二叉树节点的线索化
+    //后序线索化二叉树
     public void postThreadedNode(){
         postThreadedNode(root);
     }
@@ -327,12 +330,12 @@ class ThreadedBinaryTree{
         if (node.getLeft() != null){
             postThreadedNode(node.getLeft());
         }
-        //将当前节点设置为下一节点的前置节点
-        pre = node;
         //向右线索化
         if (node.getRight() != null){
             postThreadedNode(node.getRight());
         }
+        //将当前节点设置为下一节点的前置节点
+        pre = node;
         //当前节点的线索化
         if (node.getLeft() == null){
             //设置当前节点的前置节点
@@ -369,16 +372,12 @@ class ThreadedBinaryTree{
     public void preList(){
         HeroNode node = root;
         while (node != null){
-            System.out.println(node);
             //找到第一个线索化的节点
             while (node.getLeftType() == 0){
-                node = node.getLeft();
                 System.out.println(node);
+                node = node.getLeft();
             }
-            //输出后继节点
-            while (node.getRightType() == 1){
-                node = node.getRight();
-            }
+            System.out.println(node);
             //回到父节点后需要向右移动节点，否则会死循环
             node = node.getRight();
         }
