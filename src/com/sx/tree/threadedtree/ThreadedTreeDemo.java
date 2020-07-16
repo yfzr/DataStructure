@@ -3,7 +3,7 @@ package com.sx.tree.threadedtree;
 public class ThreadedTreeDemo {
     public static void main(String[] args){
         HeroNode root = new HeroNode(1, "kobe");
-        HeroNode heroNode2 = new HeroNode(3, "wades");
+        HeroNode heroNode2 = new HeroNode(3, "wanes");
         HeroNode heroNode3 = new HeroNode(6, "james");
         HeroNode heroNode4 = new HeroNode(8, "paul");
         HeroNode heroNode5 = new HeroNode(10, "shaq");
@@ -17,6 +17,11 @@ public class ThreadedTreeDemo {
         heroNode2.setLeft(heroNode4);
         heroNode2.setRight(heroNode5);
         heroNode3.setLeft(heroNode6);
+        heroNode2.setParent(root);
+        heroNode3.setParent(root);
+        heroNode4.setParent(heroNode2);
+        heroNode5.setParent(heroNode2);
+        heroNode6.setParent(heroNode3);
 
         //中序线索化
         //tbt.infixThreadedNode();
@@ -42,6 +47,16 @@ class HeroNode{
     private String name;
     private HeroNode left;
     private HeroNode right;
+    private HeroNode parent;    //记录每个节点的父节点
+
+    public HeroNode getParent() {
+        return parent;
+    }
+
+    public void setParent(HeroNode parent) {
+        this.parent = parent;
+    }
+
     //定义节点的类型，如果为0，表示节点的左（右）节点是子树，如果为1，表示节点的左（右）节点是前驱（后继）节点
     private int leftType;
 
@@ -256,7 +271,7 @@ class ThreadedBinaryTree{
     }
     public void infixThreadedNode(HeroNode node){
         if (node == null){
-            //System.out.println("二叉树为空，无法线索化");
+            System.out.println("二叉树为空，无法线索化");
             return;
         }
         //先向左线索化
@@ -290,7 +305,7 @@ class ThreadedBinaryTree{
     }
     public void preThreadedNode(HeroNode node){
         if (node == null){
-            //System.out.println("二叉树为空，无法线索化");
+            System.out.println("二叉树为空，无法线索化");
             return;
         }
         //当前节点的线索化
@@ -323,7 +338,7 @@ class ThreadedBinaryTree{
     }
     public void postThreadedNode(HeroNode node){
         if (node == null){
-            //System.out.println("二叉树为空，无法线索化");
+            System.out.println("二叉树为空，无法线索化");
             return;
         }
         //先向左线索化
@@ -386,32 +401,34 @@ class ThreadedBinaryTree{
     public void postList(){
         HeroNode node = root;
         //找到第一个线索化的节点
-        while (node.getLeftType() == 0){
+        while (node!= null && node.getLeftType() == 0){
             node = node.getLeft();
         }
         while (node != null){
-            //输出后继节点
+            //进入后继节点
             if (node.getRightType() == 1){
                 System.out.println(node);
                 pre = node;
                 node = node.getRight();
             }else {
+                //当前节点如果是线索化节点的父节点，子节点的右指针会指向其父节点（非root），它的前驱节点是它的右子节点
                 if (node.getRight() == pre){
                     System.out.println(node);
+                    //后序遍历中根节点是最后一个，可以直接返回
                     if (node == root){
                         return;
                     }
                     pre = node;
-                    node = node.getRight();
+                    //指向当前父节点的父节点进行处理
+                    node = node.getParent();
                 }else {
+                    //如果当前节点是一般的父节点（位于根节点和线索化节点的父节点之间），则指向其右节点，继续处理。此处是指将指针从根节点移到其右子节点
                     node = node.getRight();
                     while (node != null && node.getLeftType() == 0){
                         node = node.getLeft();
                     }
                 }
             }
-            //回到父节点后需要向右移动节点，否则会死循环
-            node = node.getRight();
         }
     }
     //前序遍历
