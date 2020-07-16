@@ -38,7 +38,7 @@ public class HeapSort {
      */
     public static void heapSort(int[] arr){
         int temp = 0;
-        //将无序序列构成一个大（小）顶堆，从最下面左侧的非叶子节点开始
+        //将无序序列构成一个大（小）顶堆，从最后一个的非叶子节点开始
         for (int i = arr.length/2-1; i >= 0; i--) {
             adjustHeap(arr, i, arr.length);
         }
@@ -47,7 +47,7 @@ public class HeapSort {
             temp = arr[0];
             arr[0] = arr[i];
             arr[i] = temp;
-            //每次都是将堆顶节点与所操作的序列的最后一个交换，所以是0
+            //每次都是将堆顶节点与最后一个节点交换，所以是0。当确定一个最大值后，就不需要变动，所以调整的节点数逐渐减少
             adjustHeap(arr, 0, i);
         }
 
