@@ -18,6 +18,9 @@ public class HuffmanCode {
         //获取霍夫曼编码
         Map<Byte, String> map = getCodes(root);
         System.out.println("霍夫曼编码表：" + map);
+        //
+        byte[] huffmanCodeBytes = zip(contentsByte, map);
+        System.out.println(Arrays.toString(huffmanCodeBytes));
 
     }
 
@@ -102,6 +105,38 @@ public class HuffmanCode {
                 huffmanCodes.put(node.getData(), stringBuilder1.toString());
             }
         }
+    }
+
+    /**
+     * 霍夫曼编码压缩
+     * @param bytes 原始文本的字节数组
+     * @param huffmanCodes 不同字节信息对应的霍夫曼编码路径
+     * @return 压缩后的编码
+     */
+    public static byte[] zip(byte[] bytes, Map<Byte, String > huffmanCodes){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (byte b: bytes) {
+            stringBuilder.append(huffmanCodes.get(b));
+        }
+        int len;
+        if (stringBuilder.length() % 8 == 0){
+            len = stringBuilder.length() / 8;
+        }else {
+            len = stringBuilder.length() / 8 + 1;
+        }
+        byte[] huffmanCodeBytes = new byte[len];
+        int index = 0;
+        for (int i = 0; i < stringBuilder.length(); i+=8) {
+            String strByte;
+            if (i + 8 > stringBuilder.length()){
+                strByte = stringBuilder.substring(i);
+            }else {
+                strByte = stringBuilder.substring(i, i +8);
+            }
+            huffmanCodeBytes[index] = (byte) Integer.parseInt(strByte, 2);
+            index++;
+        }
+        return huffmanCodeBytes;
     }
 }
 
