@@ -5,11 +5,17 @@ import java.util.*;
 public class HuffmanCode {
     public static void main(String[] args){
         //编码字符串
-        String contents = "i like like like java do you like a java";
+        String content = "i like like like java do you like a java";
+        System.out.println("数据原始长度：" + content.length());
+        //编码
+        byte[] huffmanCodeBytes = huffmanZip(content);
+        System.out.println("压缩后的长度：" + huffmanCodeBytes.length);
+        System.out.println("压缩率：" + zipRate(content.length(), huffmanCodeBytes.length));
+        /*
         //转换为字节数组
-        byte[] contentsByte = contents.getBytes();
+        byte[] contentBytes = content.getBytes();
         //通过文本的字节数组，建立霍夫曼树的节点信息
-        List<Node> nodes = getNodes(contentsByte);
+        List<Node> nodes = getNodes(contentBytes);
         System.out.println("notes=" + nodes);
         //建立霍夫曼树
         Node root = creatHuffmanTree(nodes);
@@ -19,9 +25,38 @@ public class HuffmanCode {
         Map<Byte, String> map = getCodes(root);
         System.out.println("霍夫曼编码表：" + map);
         //
-        byte[] huffmanCodeBytes = zip(contentsByte, map);
+        byte[] huffmanCodeBytes = zip(contentBytes, map);
         System.out.println(Arrays.toString(huffmanCodeBytes));
+        */
 
+    }
+
+    public static double zipRate(double a, double b) {
+        if (a > 0 && b > 0){
+            return (a - b) / a;
+        }else {
+            System.out.println("数据有误");
+            return -1;
+        }
+    }
+
+    /**
+     * 封装霍夫曼数据压缩过程
+     * @param content 待编码的原始数据
+     * @return 压缩后的数据（字节数组）
+     */
+    public static byte[] huffmanZip(String content){
+        //将待压缩的信息转换为字节数组
+        byte[] contentBytes = content.getBytes();
+        //通过字节数组，建立霍夫曼树的节点信息
+        List<Node> nodes = getNodes(contentBytes);
+        //根据节点，建立霍夫曼树
+        Node root = creatHuffmanTree(nodes);
+        //获取霍夫曼编码
+        Map<Byte, String> map = getCodes(root);
+        //根据霍夫曼编码，以字节长度（8位）为单位，压缩数据
+        byte[] huffmanCodeBytes = zip(contentBytes, map);
+        return huffmanCodeBytes;
     }
 
     //获取节点信息，存放在list中，用于建立霍夫曼树
@@ -109,15 +144,17 @@ public class HuffmanCode {
 
     /**
      * 霍夫曼编码压缩
-     * @param bytes 原始文本的字节数组
+     * @param bytes 原始信息的字节数组
      * @param huffmanCodes 不同字节信息对应的霍夫曼编码路径
-     * @return 压缩后的编码
+     * @return 压缩后的信息数组
      */
     public static byte[] zip(byte[] bytes, Map<Byte, String > huffmanCodes){
         StringBuilder stringBuilder = new StringBuilder();
+        //遍历原始信息数组，将不同的字节信息对应的霍夫曼编码依次拼接成串
         for (byte b: bytes) {
             stringBuilder.append(huffmanCodes.get(b));
         }
+        //根据霍夫曼编码的长度，建立对应的存放二进制编码的数组
         int len;
         if (stringBuilder.length() % 8 == 0){
             len = stringBuilder.length() / 8;
@@ -125,14 +162,17 @@ public class HuffmanCode {
             len = stringBuilder.length() / 8 + 1;
         }
         byte[] huffmanCodeBytes = new byte[len];
+        //以字节长度为单位，压缩霍夫曼编码
         int index = 0;
         for (int i = 0; i < stringBuilder.length(); i+=8) {
             String strByte;
+            //注意索引越界，此时截取剩余的编码即可
             if (i + 8 > stringBuilder.length()){
                 strByte = stringBuilder.substring(i);
             }else {
                 strByte = stringBuilder.substring(i, i +8);
             }
+            //将截取到的二进制串转为字节
             huffmanCodeBytes[index] = (byte) Integer.parseInt(strByte, 2);
             index++;
         }
