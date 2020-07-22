@@ -178,6 +178,27 @@ public class HuffmanCode {
         }
         return huffmanCodeBytes;
     }
+
+    /**
+     * 将一个字节转换为二进制字符串
+     * @param flag 标志是否需要补高位，true为需要，如果是最后一个字节，无需补高位
+     * @param b 待转换的字节
+     * @return 二进制字符串
+     */
+    public static String byteToBitString(boolean flag, byte b){
+        //将字节存放在int类型中，但是会因此自动补上前面的3个字节
+        int temp = b;
+        if (flag){
+            temp |= 256;    //按位与 256 -> 1 0000 0000
+        }
+        //利用Integer的方法转为二进制
+        String str = Integer.toBinaryString(temp);
+        if (flag){
+            return str.substring(str.length() - 8);
+        }else {
+            return str;
+        }
+    }
 }
 
 //节点
