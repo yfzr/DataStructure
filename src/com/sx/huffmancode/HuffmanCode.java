@@ -37,9 +37,14 @@ public class HuffmanCode {
         */
 
         //文件压缩测试
-        String srcFile = "F://src.png";
-        String destFile = "F://dest.zip";
-        zipFile(srcFile, destFile);
+//        String srcFile = "E://src.jpg";
+//        String destFile = "E://dest.zip";
+//        zipFile(srcFile, destFile);
+
+        //文件解压测试
+        String zipFile = "E://dest.zip";
+        String destFile = "E://src2.jpg";
+        unzipFile(zipFile, destFile);
 
     }
 
@@ -222,7 +227,7 @@ public class HuffmanCode {
      * @param huffmanCodeBytes 编码后（压缩后）的字节数组
      * @return 原始字符串
      */
-    public static String decode(Map<Byte, String> huffmanCodes, byte[] huffmanCodeBytes){
+    public static byte[] decode(Map<Byte, String> huffmanCodes, byte[] huffmanCodeBytes){
         StringBuilder stringBuilder = new StringBuilder();
         //将编码后的字节数组转换为二进制字符串
         for (int i = 0; i < huffmanCodeBytes.length; i++) {
@@ -264,10 +269,14 @@ public class HuffmanCode {
         for (int i = 0; i < resBytes.length; i++) {
             resBytes[i] = list.get(i);
         }
-        return new String(resBytes);
+        return resBytes;
     }
 
-
+    /**
+     * 压缩文件
+     * @param srcFile 源文件路径
+     * @param destFile 目标文件路径
+     */
     public static void zipFile(String srcFile, String destFile){
         FileInputStream fis = null;
         ObjectOutputStream oos = null;
@@ -289,6 +298,33 @@ public class HuffmanCode {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    /**
+     * 解压缩文件
+     * @param zipFile 源压缩文件路径
+     * @param destFile 解压后的目标文件路径
+     */
+    public static void unzipFile(String zipFile, String destFile){
+        ObjectInputStream ois = null;
+        OutputStream os = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(zipFile));
+            byte[] huffmanBytes = (byte[]) ois.readObject();
+            Map<Byte, String> huffmanCodes = (Map<Byte, String>) ois.readObject();
+            byte[] destBytes = decode(huffmanCodes, huffmanBytes);
+            os = new FileOutputStream(destFile);
+            os.write(destBytes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                ois.close();
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
