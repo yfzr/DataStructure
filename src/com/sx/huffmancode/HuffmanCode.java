@@ -1,16 +1,23 @@
 package com.sx.huffmancode;
 
+import java.io.*;
 import java.util.*;
 
 public class HuffmanCode {
     public static void main(String[] args){
+        /*
         //编码字符串
         String content = "i like like like java do you like a java";
+        byte[] contentBytes = content.getBytes();
         System.out.println("数据原始长度：" + content.length());
         //编码
-        byte[] huffmanCodeBytes = huffmanZip(content);
+        byte[] huffmanCodeBytes = huffmanZip(contentBytes);
         System.out.println("压缩后的长度：" + huffmanCodeBytes.length);
         System.out.println("压缩率：" + zipRate(content.length(), huffmanCodeBytes.length));
+        //解码
+        String s = decode(huffmanCodes, huffmanCodeBytes);
+        System.out.println("解码：" + s);
+         */
         /*
         //转换为字节数组
         byte[] contentBytes = content.getBytes();
@@ -29,8 +36,19 @@ public class HuffmanCode {
         System.out.println(Arrays.toString(huffmanCodeBytes));
         */
 
+        //文件压缩测试
+        String srcFile = "F://src.png";
+        String destFile = "F://dest.zip";
+        zipFile(srcFile, destFile);
+
     }
 
+    /**
+     * 计算压缩率
+     * @param a 原始的长度
+     * @param b 压缩后的长度
+     * @return 压缩率
+     */
     public static double zipRate(double a, double b) {
         if (a > 0 && b > 0){
             return (a - b) / a;
@@ -42,12 +60,10 @@ public class HuffmanCode {
 
     /**
      * 封装霍夫曼数据压缩过程
-     * @param content 待编码的原始数据
+     * @param contentBytes 待编码的原始数据
      * @return 压缩后的数据（字节数组）
      */
-    public static byte[] huffmanZip(String content){
-        //将待压缩的信息转换为字节数组
-        byte[] contentBytes = content.getBytes();
+    public static byte[] huffmanZip(byte[] contentBytes){
         //通过字节数组，建立霍夫曼树的节点信息
         List<Node> nodes = getNodes(contentBytes);
         //根据节点，建立霍夫曼树
@@ -177,6 +193,103 @@ public class HuffmanCode {
             index++;
         }
         return huffmanCodeBytes;
+    }
+
+    /**
+     * 将一个字节转换为二进制字符串
+     * @param flag 标志是否需要补高位，true为需要，如果是最后一个字节，无需补高位
+     * @param b 待转换的字节
+     * @return 二进制字符串
+     */
+    public static String byteToBitString(boolean flag, byte b){
+        //将字节存放在int类型中，但是会因此自动补上前面的3个字节
+        int temp = b;
+        if (flag){
+            temp |= 256;    //按位与 256 -> 1 0000 0000
+        }
+        //利用Integer的方法转为二进制
+        String str = Integer.toBinaryString(temp);
+        if (flag){
+            return str.substring(str.length() - 8);
+        }else {
+            return str;
+        }
+    }
+
+    /**
+     * 解码
+     * @param huffmanCodes 霍夫曼编码表
+     * @param huffmanCodeBytes 编码后（压缩后）的字节数组
+     * @return 原始字符串
+     */
+    public static String decode(Map<Byte, String> huffmanCodes, byte[] huffmanCodeBytes){
+        StringBuilder stringBuilder = new StringBuilder();
+        //将编码后的字节数组转换为二进制字符串
+        for (int i = 0; i < huffmanCodeBytes.length; i++) {
+            Byte b = huffmanCodeBytes[i];
+            //判断是否是最后一个字节，最后一个字节可能不满8位
+            boolean flag = (i == huffmanCodeBytes.length - 1);
+            stringBuilder.append(byteToBitString(!flag, b));
+        }
+        //将霍夫曼表调换存储，便于反向查询
+        Map<String, Byte> map = new HashMap();
+        for (Map.Entry<Byte, String> entry: huffmanCodes.entrySet()) {
+            map.put(entry.getValue(), entry.getKey());
+        }
+        List<Byte> list = new ArrayList<>();
+        //将二进制字符串根据不同的字节进行拆分
+        for (int i = 0; i < stringBuilder.length();) {
+            String key = null;
+            int count = 1;
+            Byte b = null;
+            boolean flag = true;
+            while (flag){
+                //逐步截取字符串
+                key = stringBuilder.substring(i, i + count);
+                b = map.get(key);
+                //没有匹配值，则继续截取
+                if (b == null){
+                    count++;
+                //有匹配值，则结束
+                }else {
+                    flag = false;
+                }
+            }
+            list.add(b);
+            //i从匹配到的索引后继续开始
+            i += count;
+        }
+        //将list中的字节存入数组
+        byte[] resBytes = new byte[list.size()];
+        for (int i = 0; i < resBytes.length; i++) {
+            resBytes[i] = list.get(i);
+        }
+        return new String(resBytes);
+    }
+
+
+    public static void zipFile(String srcFile, String destFile){
+        FileInputStream fis = null;
+        ObjectOutputStream oos = null;
+        try {
+            fis = new FileInputStream(srcFile);
+            byte[] bytes = new byte[fis.available()];
+            fis.read(bytes);
+            byte[] huffmanBytes = huffmanZip(bytes);
+            oos = new ObjectOutputStream(new FileOutputStream(destFile));
+            oos.writeObject(huffmanCodes);
+            oos.writeObject(huffmanBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                fis.close();
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 }
 
