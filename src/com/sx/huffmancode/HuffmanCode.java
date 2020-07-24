@@ -37,13 +37,13 @@ public class HuffmanCode {
         */
 
         //文件压缩测试
-//        String srcFile = "E://src.jpg";
-//        String destFile = "E://dest.zip";
+//        String srcFile = "F://src.png";
+//        String destFile = "F://dest.zip";
 //        zipFile(srcFile, destFile);
 
         //文件解压测试
-        String zipFile = "E://dest.zip";
-        String destFile = "E://src2.jpg";
+        String zipFile = "F://dest.zip";
+        String destFile = "F://src2.png";
         unzipFile(zipFile, destFile);
 
     }
@@ -281,12 +281,18 @@ public class HuffmanCode {
         FileInputStream fis = null;
         ObjectOutputStream oos = null;
         try {
+            //创建源文件的输入流
             fis = new FileInputStream(srcFile);
+            //创建和源文件一样大小的字节数组
             byte[] bytes = new byte[fis.available()];
+            //一次性读取
             fis.read(bytes);
+            //压缩文件
             byte[] huffmanBytes = huffmanZip(bytes);
             oos = new ObjectOutputStream(new FileOutputStream(destFile));
+            //对象流写入霍夫曼编码表对象
             oos.writeObject(huffmanCodes);
+            //对象流写入霍夫曼编码的字节数组对象
             oos.writeObject(huffmanBytes);
         } catch (IOException e) {
             e.printStackTrace();
@@ -307,13 +313,18 @@ public class HuffmanCode {
      * @param destFile 解压后的目标文件路径
      */
     public static void unzipFile(String zipFile, String destFile){
+        //对象流读取文件中的对象
         ObjectInputStream ois = null;
         OutputStream os = null;
         try {
             ois = new ObjectInputStream(new FileInputStream(zipFile));
-            byte[] huffmanBytes = (byte[]) ois.readObject();
+            //读取霍夫曼编码
             Map<Byte, String> huffmanCodes = (Map<Byte, String>) ois.readObject();
+            //读取源文件编码后的字节数组，即该压缩文件对应的字节数组
+            byte[] huffmanBytes = (byte[]) ois.readObject();
+            //解码
             byte[] destBytes = decode(huffmanCodes, huffmanBytes);
+            //将解码后的信息写入目标文件
             os = new FileOutputStream(destFile);
             os.write(destBytes);
         }catch (Exception e){
