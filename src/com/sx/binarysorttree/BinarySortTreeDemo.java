@@ -72,6 +72,47 @@ class Node{
         }
     }
 
+    //查找要删除的节点
+    public Node search(int value){
+        //找到节点
+        if (value == this.value){
+            return this;
+        //如果删除的节点值小于当前节点值，则向左递归查找
+        }else if (value < this.value){
+            //没有对应的节点
+            if (this.left == null){
+                return null;
+            }
+            return this.left.search(value);
+        //如果删除节点的值大于等于当前节点的值，则向右递归查找
+        }else {
+            //没有对应节点
+            if (this.right == null){
+                return null;
+            }
+            return this.right.search(value);
+        }
+    }
+
+    //查找要删除节点的父节点
+    public Node searchParent(int value){
+        //需要保证当前节点有子节点，其子节点的值符合，则返回当前节点
+        if ((this.left != null && this.left.value == value) || (this.right != null && this.right.value == value)){
+            return this;
+        }else {
+            //要删除节点的值小于当前节点的左子节点的值，则向左递归查找
+            if (this.left != null && value < this.left.value){
+                return this.left.searchParent(value);
+            //要删除节点的值大于当前节点的右子节点的值，则向右递归查找
+            }else if (this.right != null && value >= this.right.value){
+                return this.right.searchParent(value);
+            //没有对应的父节点
+            }else {
+                return null;
+            }
+        }
+    }
+
     public int getValue() {
         return value;
     }
