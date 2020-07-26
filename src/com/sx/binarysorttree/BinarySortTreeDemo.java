@@ -2,7 +2,7 @@ package com.sx.binarysorttree;
 
 public class BinarySortTreeDemo {
     public static void main(String[] args){
-        int[] arr = {7,3,10,12,5,1,9};
+        int[] arr = {7,3,10,12,5,1,9,2};
         BinarySortTree bst = new BinarySortTree();
         for (int i: arr) {
             Node n = new Node(i);
@@ -10,11 +10,18 @@ public class BinarySortTreeDemo {
         }
         System.out.println("中序遍历二叉排序树：");
         bst.infixOrder();
+
+        //测试删除叶子节点
+        bst.delete(2);
+        System.out.println("删除后");
+        bst.infixOrder();
     }
 }
 
+//二叉排序树
 class BinarySortTree{
     private Node root;
+    //添加节点
     public void add(Node node){
         if (root == null){
             root = node;
@@ -22,6 +29,7 @@ class BinarySortTree{
             root.add(node);
         }
     }
+    //中序遍历
     public void infixOrder(){
         if (root == null){
             System.out.println("二叉树为空");
@@ -30,8 +38,61 @@ class BinarySortTree{
             root.infixOrder();
         }
     }
+    //查找节点
+    public Node search(int value){
+        if (root == null){
+            return null;
+        }
+        return root.search(value);
+    }
+    //查找需要节点的父节点
+    public Node searchParent(int value){
+        if (root == null){
+            return null;
+        }
+        return root.searchParent(value);
+    }
+    //删除节点
+    public void delete(int value){
+        if (root == null){
+            return;
+        }
+        Node targetNode = search(value);
+        if (targetNode == null){
+            return;
+        }
+        if (root.getLeft() == null && root.getRight() == null){
+            root = null;
+            return;
+        }
+        Node parentNode = searchParent(value);
+        if (targetNode.getLeft() == null && targetNode.getRight() == null){
+            if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
+                parentNode.setLeft(null);
+            }else if (parentNode.getRight() != null && parentNode.getRight().getValue() == value){
+                parentNode.setRight(null);
+            }
+        }else if (targetNode.getLeft() != null && targetNode.getRight() != null){
+
+        }else {
+            if (targetNode.getLeft() != null){
+                if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
+                    parentNode.setLeft(targetNode.getLeft());
+                }else {
+                    parentNode.setRight(targetNode.getLeft());
+                }
+            }else {
+                if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
+                    parentNode.setLeft(targetNode.getRight());
+                }else {
+                    parentNode.setRight(targetNode.getRight());
+                }
+            }
+        }
+    }
 }
 
+//节点
 class Node{
     private int value;
     private Node left;
