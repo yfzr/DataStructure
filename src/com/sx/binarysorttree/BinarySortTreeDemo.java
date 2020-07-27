@@ -11,8 +11,8 @@ public class BinarySortTreeDemo {
         System.out.println("中序遍历二叉排序树：");
         bst.infixOrder();
 
-        //测试删除叶子节点
-        bst.delete(2);
+        //测试删除节点
+        bst.delete(7);
         System.out.println("删除后");
         bst.infixOrder();
     }
@@ -42,48 +42,97 @@ class BinarySortTree{
     public Node search(int value){
         if (root == null){
             return null;
+        }else {
+
+            return root.search(value);
         }
-        return root.search(value);
     }
     //查找需要节点的父节点
     public Node searchParent(int value){
         if (root == null){
             return null;
+        }else {
+
+            return root.searchParent(value);
         }
-        return root.searchParent(value);
+    }
+    //删除待删除节点的右子树的最小值
+    public int delRightMin(Node node){
+        //存放目标节点的右子节点
+        Node target = node;
+        //找到该节点下的最小值节点
+        while (target.getLeft() != null){
+            target = target.getLeft();
+        }
+        //删除最小值节点
+        delete(target.getValue());
+        return target.getValue();
+    }
+    //删除待删除节点的左子树的最大值
+    public int delLeftMax(Node node){
+        //存放目标节点的左子节点
+        Node target = node;
+        //找到该节点下的最大值
+        while (target.getRight() != null){
+            target = target.getRight();
+        }
+        //删除最大值的节点
+        delete(target.getValue());
+        return target.getValue();
     }
     //删除节点
     public void delete(int value){
         if (root == null){
             return;
         }
+        //找到待删除的节点
         Node targetNode = search(value);
+        //如果节点不存在，则直接返回
         if (targetNode == null){
             return;
         }
+        //当待删除的节点是只有一个节点的树，则直接置空即可
         if (root.getLeft() == null && root.getRight() == null){
             root = null;
             return;
         }
+        //找到待删除节点的父节点
         Node parentNode = searchParent(value);
+        //1. 如果目标节点为叶子节点
         if (targetNode.getLeft() == null && targetNode.getRight() == null){
+            //判断目标节点是否是左子节点，，用以配置其父节点
             if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
                 parentNode.setLeft(null);
+            //判断目标节点是否是右子节点，用以配置其父节点
             }else if (parentNode.getRight() != null && parentNode.getRight().getValue() == value){
                 parentNode.setRight(null);
             }
+        //2. 如果目标节点为有两个子节点的节点
         }else if (targetNode.getLeft() != null && targetNode.getRight() != null){
+            //方式一
+            //int minValue = delRightMin(targetNode.getRight());
+            //targetNode.setValue(minValue);
 
+            //方式二
+            int maxValue = delLeftMax(targetNode.getLeft());
+            targetNode.setValue(maxValue);
+        //3. 如果目标节点为只有一个子节点的节点
         }else {
+            //如果是左子节点
             if (targetNode.getLeft() != null){
+                //判断目标节点是否是左子节点，用以配置其父节点
                 if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
                     parentNode.setLeft(targetNode.getLeft());
+                //判断目标节点是否是右子节点，用以配置其父节点
                 }else {
                     parentNode.setRight(targetNode.getLeft());
                 }
+            //如果是右子节点
             }else {
+                //判断目标节点是否是左子节点，用以配置其父节点
                 if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
                     parentNode.setLeft(targetNode.getRight());
+                //判断目标节点是否是右子节点，用以配置其父节点
                 }else {
                     parentNode.setRight(targetNode.getRight());
                 }
@@ -162,10 +211,10 @@ class Node{
             return this;
         }else {
             //要删除节点的值小于当前节点的左子节点的值，则向左递归查找
-            if (this.left != null && value < this.left.value){
+            if (this.left != null && value < this.value){
                 return this.left.searchParent(value);
             //要删除节点的值大于当前节点的右子节点的值，则向右递归查找
-            }else if (this.right != null && value >= this.right.value){
+            }else if (this.right != null && value >= this.value){
                 return this.right.searchParent(value);
             //没有对应的父节点
             }else {
