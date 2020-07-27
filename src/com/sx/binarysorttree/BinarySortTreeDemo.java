@@ -13,6 +13,14 @@ public class BinarySortTreeDemo {
 
         //测试删除节点
         bst.delete(7);
+        bst.delete(3);
+        bst.delete(12);
+        bst.delete(5);
+        bst.delete(9);
+        bst.delete(2);
+        bst.delete(1);
+        bst.delete(10);
+        System.out.println("root=" + bst.getRoot());
         System.out.println("删除后");
         bst.infixOrder();
     }
@@ -21,6 +29,10 @@ public class BinarySortTreeDemo {
 //二叉排序树
 class BinarySortTree{
     private Node root;
+    //获取根节点
+    public Node getRoot() {
+        return root;
+    }
     //添加节点
     public void add(Node node){
         if (root == null){
@@ -120,21 +132,32 @@ class BinarySortTree{
         }else {
             //如果是左子节点
             if (targetNode.getLeft() != null){
-                //判断目标节点是否是左子节点，用以配置其父节点
-                if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
-                    parentNode.setLeft(targetNode.getLeft());
-                //判断目标节点是否是右子节点，用以配置其父节点
+                //如果一共只剩下两个节点，则父节点不存在，会出现空指令异常
+                if (parentNode != null){
+                    //判断目标节点是否是左子节点，用以配置其父节点
+                    if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
+                        parentNode.setLeft(targetNode.getLeft());
+                        //判断目标节点是否是右子节点，用以配置其父节点
+                    }else {
+                        parentNode.setRight(targetNode.getLeft());
+                    }
+                //当父节点不存在，则子节点就成为根节点
                 }else {
-                    parentNode.setRight(targetNode.getLeft());
+                    root = targetNode.getLeft();
                 }
             //如果是右子节点
             }else {
-                //判断目标节点是否是左子节点，用以配置其父节点
-                if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
-                    parentNode.setLeft(targetNode.getRight());
-                //判断目标节点是否是右子节点，用以配置其父节点
+                //同上
+                if (parentNode != null){
+                    //判断目标节点是否是左子节点，用以配置其父节点
+                    if (parentNode.getLeft() != null && parentNode.getLeft().getValue() == value){
+                        parentNode.setLeft(targetNode.getRight());
+                        //判断目标节点是否是右子节点，用以配置其父节点
+                    }else {
+                        parentNode.setRight(targetNode.getRight());
+                    }
                 }else {
-                    parentNode.setRight(targetNode.getRight());
+                    root = targetNode.getRight();
                 }
             }
         }
