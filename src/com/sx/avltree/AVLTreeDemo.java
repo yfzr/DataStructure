@@ -2,7 +2,12 @@ package com.sx.avltree;
 
 public class AVLTreeDemo {
     public static void main(String[] args){
-        int[] arr = {4,3,6,5,7,8};
+        //左旋测试
+        //int[] arr = {4,3,6,5,7,8};
+        //右旋测试
+        //int[] arr = {10,12,8,9,7,6};
+        //双旋测试
+        int[] arr = {10,11,7,6,8,9};
         AVLTree avlTree = new AVLTree();
         for (int i = 0; i < arr.length; i++) {
             avlTree.add(new Node(arr[i]));
@@ -181,8 +186,25 @@ class Node{
                 this.right.add(node);
             }
         }
+        //如果当前节点的 右子树的高度 - 左子树的高度 > 1，则要左旋
         if (rightHeight() - leftHeight() > 1){
-            leftRotate();
+            if (right != null && right.leftHeight() > right.rightHeight()){
+                right.rightRotate();
+                leftRotate();
+            }else {
+                leftRotate();
+            }
+            return;
+        }
+        //如果当前节点的 左子树的高度 - 右子树的高度 > 1，则要右旋
+        if (leftHeight() - rightHeight() > 1){
+            if (left != null && left.rightHeight() > left.leftHeight()){
+                left.leftRotate();
+                rightRotate();
+            }else {
+                rightRotate();
+            }
+            return;
         }
     }
 
@@ -264,6 +286,15 @@ class Node{
         value = right.value;
         right = right.right;
         left = newNode;
+    }
+    //右旋转
+    public void rightRotate(){
+        Node newNode = new Node(value);
+        newNode.right = right;
+        newNode.left = left.right;
+        value = right.value;
+        left = left.left;
+        right = newNode;
     }
 
     public int getValue() {
