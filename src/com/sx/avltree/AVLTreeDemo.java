@@ -188,22 +188,26 @@ class Node{
         }
         //如果当前节点的 右子树的高度 - 左子树的高度 > 1，则要左旋
         if (rightHeight() - leftHeight() > 1){
+            //如果当前节点的右子树非空，且右子节点的左子树的高度大于其右子树的高度，则要先局部右旋
             if (right != null && right.leftHeight() > right.rightHeight()){
                 right.rightRotate();
                 leftRotate();
             }else {
                 leftRotate();
             }
+            //及时返回，准备添加下一个节点，无需执行后续的代码
             return;
         }
         //如果当前节点的 左子树的高度 - 右子树的高度 > 1，则要右旋
         if (leftHeight() - rightHeight() > 1){
+            //如果当前节点的左子树非空，且左子节点的右子树的高度大于其左子树的高度，则要先局部左旋
             if (left != null && left.rightHeight() > left.leftHeight()){
                 left.leftRotate();
                 rightRotate();
             }else {
                 rightRotate();
             }
+            //及时返回，准备添加下一个节点，无需执行后续的代码
             return;
         }
     }
@@ -224,14 +228,14 @@ class Node{
         //找到节点
         if (value == this.value){
             return this;
-            //如果删除的节点值小于当前节点值，则向左递归查找
+        //如果删除的节点值小于当前节点值，则向左递归查找
         }else if (value < this.value){
             //没有对应的节点
             if (this.left == null){
                 return null;
             }
             return this.left.search(value);
-            //如果删除节点的值大于等于当前节点的值，则向右递归查找
+        //如果删除节点的值大于等于当前节点的值，则向右递归查找
         }else {
             //没有对应节点
             if (this.right == null){
@@ -250,10 +254,10 @@ class Node{
             //要删除节点的值小于当前节点的左子节点的值，则向左递归查找
             if (this.left != null && value < this.value){
                 return this.left.searchParent(value);
-                //要删除节点的值大于当前节点的右子节点的值，则向右递归查找
+            //要删除节点的值大于当前节点的右子节点的值，则向右递归查找
             }else if (this.right != null && value >= this.value){
                 return this.right.searchParent(value);
-                //没有对应的父节点
+            //没有对应的父节点
             }else {
                 return null;
             }
@@ -276,15 +280,22 @@ class Node{
     }
     //计算总高度
     public int getHeight(){
+        //利用递归层层统计树的高度
         return Math.max(left == null ? 0 : left.getHeight(), right == null ? 0 : right.getHeight()) + 1;
     }
     //左旋转
     public void leftRotate(){
+        //创建新节点，存放当前节点的值
         Node newNode = new Node(value);
+        //设置新节点的左子节点为当前节点的左子节点
         newNode.left = left;
+        //设置新节点的右子节点为当前节点的右子节点的左子节点，此处的左子节点如果存在子树，则可能造成左旋后仍然不满足平衡二叉树，因此需要双旋
         newNode.right = right.left;
+        //将当前节点的值设置为其右子节点的值
         value = right.value;
+        //将当前节点的右子节点设置为右子节点的右子节点，可看成右侧节点的上移
         right = right.right;
+        //将当前节点的左子节点设置为新节点，因此原来的左子树高度变大，右子树高度减小，达到了平衡的效果
         left = newNode;
     }
     //右旋转
